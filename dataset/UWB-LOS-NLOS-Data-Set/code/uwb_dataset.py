@@ -24,7 +24,8 @@ def import_from_files():
             output_data = [] 
             # read data from file
             df = pd.read_csv(filename, sep=',', header=0)
-            input_data = df.as_matrix()
+            # input_data = df.as_matrix() # Deprecated
+            input_data = df.values
             # append to array
             if first > 0:
                 first = 0
@@ -34,8 +35,8 @@ def import_from_files():
     
     return output_arr
 
+# Program entrypoint
 if __name__ == '__main__':
-
     # import raw data from folder with dataset
     print("Importing dataset to numpy array")
     print("-------------------------------")
