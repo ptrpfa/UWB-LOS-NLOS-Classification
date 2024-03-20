@@ -4,3 +4,5 @@
 .vscode
 venv
 data-venv
+.venv
+**/dataset/Processed_Dataset/*
