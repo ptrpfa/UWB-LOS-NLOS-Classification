@@ -18,7 +18,7 @@ def load_from_pickle(file_name, complete_path=True):
     return loaded_data
 
 # Function to return the performance for a classifier
-def classifier_metrics(list_y, list_pred):
+def classifier_metrics(list_y, list_pred, print_results=False):
     # Obtain metrics
     results = {
         "accuracy": accuracy_score(list_y, list_pred),
@@ -32,4 +32,17 @@ def classifier_metrics(list_y, list_pred):
         "cm": confusion_matrix(list_y, list_pred),
         "class_report": classification_report(list_y, list_pred),
     }
+    
+    if(print_results):
+        print("Accuracy:", results['accuracy'])                                    # Model Accuracy: How often is the classifier correct
+        print("Precision:", results['precision'])                                  # Model Precision: what percentage of positive tuples are labeled as such?
+        print("Recall:", results['recall'])                                        # Model Recall: what percentage of positive tuples are labelled as such?
+        print("F1 Score:", results['f1'])                                          # F1 Score: The weighted average of Precision and Recall
+        print("Mean Squared Error (MSE):", results['mse'])                         # Mean Squared Error (MSE): The average of the squares of the errors
+        print("Matthews Correlation Coefficient (MCC):", results['mcc'])           # Matthews Correlation Coefficient (MCC): Measures the quality of binary classifications
+        print("Cohen's Kappa:", results['kappa'])                                  # Cohen's Kappa: Measures inter-rater agreement for categorical items    
+        print("Hamming Loss:", results['hamming_loss_val'], end='\n\n')            # Hamming Loss: The fraction of labels that are incorrectly predicted
+        print("Confusion Matrix:\n", results['cm'], end="\n\n")
+        print("Classification Report:\n", results['class_report'], end="\n\n\n")
+        
     return results
