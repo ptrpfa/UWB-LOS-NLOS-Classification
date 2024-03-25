@@ -22,7 +22,8 @@ The goal of this project is to analyze the provided *UWN-LOS-NLOS-Dataset* datas
 ---
 The UWN-LOS-NLOS-Dataset dataset consists of 42,000 Channel Impulse Response (CIR) samples taken within seven different indoor environments, captured using Decaware’s DWM1000 UWB transceivers. These CIR samples measure the signal propagation between anchors and tags deployed in these environments. The original dataset can be obtained [here](https://github.com/ewine-project/UWB-LOS-NLOS-Data-Set).
 
-More stuff here... (distribution of data etc)
+Prepared datasets:
+- `original_dataset.pkl`: Combined dataset from all 7 UWB dataset files
 
 ### Methodology
 ---
