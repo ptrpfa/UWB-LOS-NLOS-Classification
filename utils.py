@@ -1,8 +1,12 @@
 from config import *
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, classification_report, matthews_corrcoef, cohen_kappa_score, hamming_loss, mean_squared_error
 from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
 from scipy.stats import skew, gaussian_kde, linregress
 from scipy.linalg import LinAlgError
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle, itertools
@@ -126,3 +130,51 @@ def plot_feature_relationship(df):
             ax.set_title(f"{combination[0]} vs {combination[1]}")
         plt.tight_layout()
         plt.show()
+
+# Function to plot feature-feature correlation matrix
+def plot_correlation_matrix(df):
+    corr_df = df.drop(columns='NLOS')
+    correlation_matrix = corr_df.corr()
+
+    # Plotting the correlation heatmap
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(correlation_matrix, annot=True, fmt='.2f', cmap='coolwarm')
+    plt.title('Correlation Matrix of Selected Features')
+    plt.show()
+
+    # Find pairs of features with high correlation coefficients
+    high_corr_pairs = []
+
+    for i in range(len(correlation_matrix.columns)):
+        for j in range(i+1, len(correlation_matrix.columns)):
+            if abs(correlation_matrix.iloc[i, j]) > CORRELATION_THRESHOLD:
+                high_corr_pairs.append((correlation_matrix.columns[i], correlation_matrix.columns[j], correlation_matrix.iloc[i, j]))
+
+    if high_corr_pairs:
+        print("Pairs of features with high correlation coefficients:")
+        for pair in high_corr_pairs:
+            print(f"{pair[0]} - {pair[1]}: {pair[2]:.2f}")
+    else:
+        print("No pairs of features with high correlation coefficients found.")
+        
+def get_top_features(df):
+    X = df.drop(columns='NLOS')
+    y = df['NLOS']
+
+    # Initialize the Random Forest Classifier
+    rf_classifier = RandomForestClassifier(n_estimators=100, random_state=RANDOM_STATE)
+
+    # Fit the model
+    rf_classifier.fit(X, y)
+
+    # Get feature importances
+    feature_importances = rf_classifier.feature_importances_
+
+    # Create a DataFrame for visualization
+    feature_importance_df = pd.DataFrame({'Feature': X.columns, 'Importance': feature_importances})
+
+    # Sort the DataFrame based on feature importance
+    feature_importance_df = feature_importance_df.sort_values(by='Importance', ascending=False)
+
+    # Display the top 20 most important features
+    return feature_importance_df
