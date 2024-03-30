@@ -1,10 +1,11 @@
 from config import *
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, classification_report, matthews_corrcoef, cohen_kappa_score, hamming_loss, mean_squared_error
 from sklearn.decomposition import PCA
-from scipy.stats import skew
+from scipy.stats import skew, gaussian_kde, linregress
+from scipy.linalg import LinAlgError
 import matplotlib.pyplot as plt
 import seaborn as sns
-import pickle 
+import pickle, itertools
 
 # Function to serialise an object into a pickle file
 def save_to_pickle(file_name, save_data, complete_path=True):
@@ -52,21 +53,22 @@ def classifier_metrics(list_y, list_pred, print_results=False):
     return results
 
 # Function to plot feature-NLOS histogram
-def plot_histogram(df, features):
-    # Plot numerical features with respect to the target variable
+def plot_histogram(df):
+    # Get non-class features
+    features = [col for col in df.columns if col != 'NLOS']
     plt.figure(figsize=(20, 20))
     for i, feature in enumerate(features, start=1):
         plt.subplot(len(features)//2 + 1, 2, i)
-        sns.histplot(data=df, x=feature, hue='NLOS', kde=True, stat='density', common_norm=False)
+        try:
+            sns.histplot(data=df, x=feature, hue='NLOS', kde=True, stat='density', common_norm=False)
+        except LinAlgError as e:
+            # print(f"Warning: {e}")
+            sns.histplot(data=df, x=feature, hue='NLOS', stat='density', common_norm=False)
         plt.title(f'Distribution of {feature} by NLOS')
         plt.xlabel(feature)
         plt.ylabel('Density')
-        
-        # Calculate skewness for LOS and NLOS classes
         los_skewness = df[df['NLOS'] == 0][feature].skew()
         nlos_skewness = df[df['NLOS'] == 1][feature].skew()
-
-        # Annotate skewness values on the plot
         plt.text(0.9, 0.9, f'Skewness (LOS): {los_skewness:.2f}\nSkewness (NLOS): {nlos_skewness:.2f}', 
                  horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
     plt.tight_layout()
@@ -93,3 +95,34 @@ def plot_box_plot(df, features):
     
     plt.tight_layout()
     plt.show()
+    
+# Function to plot feature-feature relationship scatter plots, with regards to LOS/NLOS
+def plot_feature_relationship(df):
+    # Filters for each class
+    nlos_class = (df['NLOS'] == 1)
+    los_class = (df['NLOS'] == 0)
+
+    # Create dictionary of feature pair combinations, excluding NLOS
+    dict_combinations = {}
+    for combination in itertools.combinations(df.columns, 2):
+        column1, column2 = combination
+        if column1 not in dict_combinations:
+            dict_combinations[column1] = []
+        dict_combinations[column1].append((column1, column2))
+    del dict_combinations['NLOS']
+
+    # Plot each group of combinations separately
+    for column, combinations in dict_combinations.items():
+        fig, axes = plt.subplots(1, len(combinations), figsize=(20, 4))  # Adjust figsize as needed
+        fig.suptitle(f"Plots for {column}", fontsize=16)
+        if len(combinations) == 1:
+            axes = [axes]  # Ensure axes is a list to handle single subplot case
+        for i, combination in enumerate(combinations):
+            ax = axes[i]  # Access the axes
+            ax.scatter(df[nlos_class][combination[0]], df[nlos_class][combination[1]], c="yellow", s=20, edgecolor='k')
+            ax.scatter(df[los_class][combination[0]], df[los_class][combination[1]], c="blue", s=20, edgecolor='k')
+            ax.set_xlabel(combination[0])
+            ax.set_ylabel(combination[1])
+            ax.set_title(f"{combination[0]} vs {combination[1]}")
+        plt.tight_layout()
+        plt.show()
