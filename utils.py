@@ -11,6 +11,31 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle, itertools
 
+# Prepare dictionary containing each feature variant's exported file
+dict_noncir = {
+    'noncir': 'noncir.pkl',
+    'noncir_mm_scaled': 'noncir_mm_scaled.pkl',
+    'noncir_ss_scaled': 'noncir_ss_scaled.pkl',
+    'noncir_trimmed': 'trimmed_noncir.pkl',
+    'noncir_mm_scaled_trimmed': 'trimmed_noncir_mm_scaled.pkl',
+    'noncir_ss_scaled_trimmed': 'trimmed_noncir_ss_scaled.pkl',
+}
+
+dict_cir = {
+    'cir': 'cir.pkl',
+    'cir_mm_scaled': 'cir_mm_scaled.pkl',
+    'cir_ss_scaled': 'cir_ss_scaled.pkl',
+    'cir_stats': 'cir_stats.pkl',
+    'cir_stats_mm_scaled': 'cir_stats_mm_scaled.pkl',
+    'cir_stats_ss_scaled': 'cir_stats_ss_scaled.pkl',
+    'cir_stats_trimmed': 'trimmed_cir_stats.pkl',
+    'cir_stats_mm_scaled_trimmed': 'trimmed_cir_stats_mm_scaled.pkl',
+    'cir_stats_ss_scaled_trimmed': 'trimmed_cir_stats_ss_scaled.pkl',
+    'cir_pca': 'cir_pca.pkl',
+    'cir_pca_mm_scaled': 'cir_pca_mm_scaled.pkl',
+    'cir_pca_ss_scaled': 'cir_pca_ss_scaled.pkl',
+}
+
 # Function to serialise an object into a pickle file
 def save_to_pickle(file_name, save_data, complete_path=True):
     file_name_with_extension = file_name + ".pkl"
@@ -20,7 +45,10 @@ def save_to_pickle(file_name, save_data, complete_path=True):
 
 # Function to deserialise a pickle file
 def load_from_pickle(file_name, complete_path=True):
-    file_name_with_extension = file_name + ".pkl"
+    if(".pkl" not in file_name):
+        file_name_with_extension = file_name + ".pkl"
+    else:
+        file_name_with_extension = file_name
     complete_file_path = f'{EXPORT_FOLDER}/{file_name_with_extension}' if(complete_path) else file_name
     with open(complete_file_path, 'rb') as file:
         loaded_data = pickle.load(file)

@@ -1,7 +1,7 @@
 """ Configurations """
 # Folders
 EXPORT_FOLDER = "./export"
-# EXPORT_FOLDER = "./dataset/Processed_Dataset" # Old path
+DATASET_FOLDER = "./dataset"
 MODEL_FOLDER = "./models"
 
 # Parameters

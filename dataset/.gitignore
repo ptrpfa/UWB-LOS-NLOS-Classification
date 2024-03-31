@@ -1,0 +1,6 @@
+# Ignore all files
+/*
+
+# Except for .gitignore
+!UWB-LOS-NLOS-Data-Set
+!.gitignore
