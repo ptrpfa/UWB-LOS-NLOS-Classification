@@ -8,11 +8,11 @@
 
 ### CSC3102 Data Analytics Team 2
 ---
-- Peter Febrianto Afandy (*2200959*) 
-- Adrian Pang Zi Jian (*2200692*)
-- Ryan Lai Wei Shao (*2201159*) 
-- Tan Yu Jie (*2201782*)
-- Ashley Tay Yong Jun (*2200795*)
+- Peter Febrianto Afandy 
+- Adrian Pang Zi Jian 
+- Ryan Lai Wei Shao 
+- Tan Yu Jie 
+- Ashley Tay Yong Jun 
 
 ### Overview
 ---
