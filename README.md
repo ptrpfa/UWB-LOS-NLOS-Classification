@@ -1,12 +1,12 @@
 ### Table of Contents
-1. [Team](#csc3102-data-analytics-team-2)
+1. [Team](#team)
 2. [Overview](#overview)
 5. [Dataset](#dataset)
 2. [Methodology](#methodology)
 3. [Repository Structure](#repository-structure)
 4. [Program Usage](#program-usage)
 
-### CSC3102 Data Analytics Team 2
+### Team
 ---
 - Peter Febrianto Afandy 
 - Adrian Pang Zi Jian 
